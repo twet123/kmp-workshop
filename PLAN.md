@@ -44,13 +44,13 @@
 ---
 
 ## Phase 2: Domain Business Logic & Use Cases
-- [ ] Implement `GetMonthlyExpensesUseCase`: fetches all expenses for a specified `year-month` grouped chronologically.
-- [ ] Implement `GetTagBreakdownUseCase`: aggregates monthly spending grouped by tag (sum per tag, percentage of total).
-- [ ] Implement `CalculateGoalProgressUseCase`: calculates total spent vs. `MonthlyGoal`, remaining balance, and warning threshold states (e.g., normal, warning at 80%, exceeded at 100%).
-- [ ] Implement `SearchAndFilterExpensesUseCase`: filters expenses by search text (in notes), tag IDs, and date intervals.
-- [ ] Implement `ExportMonthCsvUseCase`: formats all transactions of a given month into standard RFC 4180 CSV string format.
-- [ ] Implement recurring expense evaluation logic: checks and auto-generates recurring transactions for the current active month.
-- [ ] Set up Koin dependency injection modules:
+- [x] Implement `GetMonthlyExpensesUseCase`: fetches all expenses for a specified `year-month` grouped chronologically.
+- [x] Implement `GetTagBreakdownUseCase`: aggregates monthly spending grouped by tag (sum per tag, percentage of total).
+- [x] Implement `CalculateGoalProgressUseCase`: calculates total spent vs. `MonthlyGoal`, remaining balance, and warning threshold states (e.g., normal, warning at 80%, exceeded at 100%).
+- [x] Implement `SearchAndFilterExpensesUseCase`: filters expenses by search text (in notes), tag IDs, and date intervals.
+- [x] Implement `ExportMonthCsvUseCase`: formats all transactions of a given month into standard RFC 4180 CSV string format.
+- [x] Implement recurring expense evaluation logic: checks and auto-generates recurring transactions for the current active month.
+- [x] Set up Koin dependency injection modules:
   - `databaseModule` (Room instance, DAOs)
   - `repositoryModule` (Repositories)
   - `useCaseModule` (Business use cases)

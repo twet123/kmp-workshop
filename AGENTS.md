@@ -22,7 +22,7 @@
 - **Architecture:** MVVM with MVI-style UI state: `StateFlow<UiState>` + single entry `onEvent(UiEvent)`.
 - **Database:** Room KMP / SQLite
 - **Dependency Injection:** Koin
-- **Date/Time:** `kotlinx-datetime` (always use `Instant` or `LocalDate`, never `java.time.*` or `Date`).
+- **Date/Time:** `kotlinx-datetime` (always use `Instant` or `LocalDate`, never `java.time.*` or `Date`). But, prefer using kotlin.time if the same API is available in it, because kotlinx.datetime was mostly deprecated in favor of kotlin.time
 - **Navigation:** Voyager or Navigation Compose (Single-activity / single-window).
 
 ## Working Process
