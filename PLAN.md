@@ -91,30 +91,30 @@
 ---
 
 ## Phase 4: Screen Implementation & VMI Stores
-- [ ] **Dashboard Screen:**
-  - Define `DashboardState` (month, goal metrics, tag breakdown, recent list, loading/error states)
-  - Define `DashboardIntent` (SelectMonth, DeleteExpense, Refresh)
-  - Define `DashboardEffect` (one-off navigation events, snackbars)
-  - Implement `DashboardStore` to process intents, call use cases, and reduce state
-  - Implement `DashboardScreen` Compose view consuming `DashboardState` and routing intents to `DashboardStore.onIntent`
-- [ ] **Expense Entry / Editor Screen:**
-  - Define `ExpenseEntryState` (form fields, validation errors, available tags, selected currency, isEditMode)
-  - Define `ExpenseEntryIntent` (UpdateAmount, SelectTag, SelectCurrency, SelectDate, ToggleRecurring, Submit, Delete)
-  - Define `ExpenseEntryEffect` (DismissScreen, ShowValidationToast)
-  - Implement `ExpenseEntryStore`
-  - Implement `ExpenseEntryScreen` Compose view
-- [ ] **Transaction History Screen:**
-  - Define `HistoryState` (grouped expenses, active query, selected filter tags, active date range)
-  - Define `HistoryIntent` (SearchQueryChanged, TagFilterToggled, DateRangeSelected, DeleteExpense)
-  - Define `HistoryEffect` (NavigateToEditor)
-  - Implement `HistoryStore`
-  - Implement `HistoryScreen` with sticky daily headers and swipe actions
-- [ ] **Settings & Configuration Screen:**
-  - Define `SettingsState` (current monthly goal, base currency, tag list, new tag input modal state)
-  - Define `SettingsIntent` (UpdateMonthlyGoal, SelectBaseCurrency, CreateTag, EditTag, DeleteTag, TriggerCsvExport)
-  - Define `SettingsEffect` (LaunchShareSheet, ShowNotification)
-  - Implement `SettingsStore`
-  - Implement `SettingsScreen` with Tag CRUD forms and export triggers
+- [x] **Dashboard Screen:**
+  - [x] Define `DashboardState` (month, goal metrics, tag breakdown, recent list, loading/error states)
+  - [x] Define `DashboardIntent` (SelectMonth, DeleteExpense, Refresh)
+  - [x] Define `DashboardEffect` (one-off navigation events, snackbars)
+  - [x] Implement `DashboardStore` to process intents, call use cases, and reduce state
+  - [x] Implement `DashboardScreen` Compose view consuming `DashboardState` and routing intents to `DashboardStore.onIntent`
+- [x] **Expense Entry / Editor Screen:**
+  - [x] Define `ExpenseEntryState` (form fields, validation errors, available tags, selected currency, isEditMode)
+  - [x] Define `ExpenseEntryIntent` (UpdateAmount, SelectTag, SelectCurrency, SelectDate, ToggleRecurring, Submit, Delete)
+  - [x] Define `ExpenseEntryEffect` (DismissScreen, ShowValidationToast)
+  - [x] Implement `ExpenseEntryStore`
+  - [x] Implement `ExpenseEntryScreen` Compose view
+- [x] **Transaction History Screen:**
+  - [x] Define `HistoryState` (grouped expenses, active query, selected filter tags, active date range)
+  - [x] Define `HistoryIntent` (SearchQueryChanged, TagFilterToggled, DateRangeSelected, DeleteExpense)
+  - [x] Define `HistoryEffect` (NavigateToEditor)
+  - [x] Implement `HistoryStore`
+  - [x] Implement `HistoryScreen` with sticky daily headers and swipe actions
+- [x] **Settings & Configuration Screen:**
+  - [x] Define `SettingsState` (current monthly goal, base currency, tag list, new tag input modal state)
+  - [x] Define `SettingsIntent` (UpdateMonthlyGoal, SelectBaseCurrency, CreateTag, EditTag, DeleteTag, TriggerCsvExport)
+  - [x] Define `SettingsEffect` (LaunchShareSheet, ShowNotification)
+  - [x] Implement `SettingsStore`
+  - [x] Implement `SettingsScreen` with Tag CRUD forms and export triggers
 
 ---
 
