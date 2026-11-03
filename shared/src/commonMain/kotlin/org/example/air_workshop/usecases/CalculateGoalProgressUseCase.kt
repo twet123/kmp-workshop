@@ -15,7 +15,8 @@ data class GoalProgress(
     val remainingAmount: Double,
     val percentage: Double,
     val status: BudgetStatus,
-    val hasGoal: Boolean
+    val hasGoal: Boolean,
+    val currencyCode: String
 )
 
 class CalculateGoalProgressUseCase(
@@ -35,7 +36,8 @@ class CalculateGoalProgressUseCase(
                 remainingAmount = 0.0,
                 percentage = 0.0,
                 status = BudgetStatus.NORMAL,
-                hasGoal = false
+                hasGoal = false,
+                currencyCode = ""
             )
         }
 
@@ -56,7 +58,8 @@ class CalculateGoalProgressUseCase(
             remainingAmount = remaining,
             percentage = percentage,
             status = status,
-            hasGoal = true
+            hasGoal = true,
+            currencyCode = goal.currencyCode
         )
     }
 }

@@ -123,7 +123,7 @@ fun SettingsScreen(
                                         readOnly = true,
                                         modifier = Modifier
                                             .fillMaxWidth()
-                                            .menuAnchor()
+                                            .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)
                                     )
                                 }
                             }

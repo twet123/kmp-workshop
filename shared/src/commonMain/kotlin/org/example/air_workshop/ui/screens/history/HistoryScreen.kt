@@ -15,6 +15,7 @@ import org.example.air_workshop.model.Expense
 import org.example.air_workshop.ui.components.*
 import org.example.air_workshop.ui.theme.AppTheme
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.number
 import kotlinx.datetime.toLocalDateTime
 import org.koin.compose.koinInject
 
@@ -177,7 +178,7 @@ fun HistoryScreen(
                     else -> {
                         val grouped = state.expenses.groupBy { expense ->
                             val local = expense.timestamp.toLocalDateTime(TimeZone.currentSystemDefault())
-                            "${local.year}-${local.monthNumber.toString().padStart(2, '0')}-${local.day.toString().padStart(2, '0')}"
+                            "${local.year}-${local.month.number.toString().padStart(2, '0')}-${local.day.toString().padStart(2, '0')}"
                         }
 
                         LazyColumn(

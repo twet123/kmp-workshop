@@ -91,7 +91,7 @@ fun GoalProgressBar(
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Text(
-                        text = formatCurrency(progress.spentAmount, progress.targetAmount.toString()),
+                        text = formatCurrency(progress.spentAmount, progress.currencyCode),
                         style = MaterialTheme.typography.titleMedium
                     )
                 }
@@ -104,7 +104,7 @@ fun GoalProgressBar(
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Text(
-                        text = formatCurrency(progress.remainingAmount, progress.targetAmount.toString()),
+                        text = formatCurrency(progress.remainingAmount, progress.currencyCode),
                         style = MaterialTheme.typography.titleMedium,
                         color = if (progress.remainingAmount >= 0) 
                             MaterialTheme.colorScheme.onSurface 
@@ -121,7 +121,7 @@ fun GoalProgressBar(
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Text(
-                        text = formatCurrency(progress.targetAmount, progress.targetAmount.toString()),
+                        text = formatCurrency(progress.targetAmount, progress.currencyCode),
                         style = MaterialTheme.typography.titleMedium
                     )
                 }

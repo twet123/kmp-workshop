@@ -11,6 +11,7 @@ import org.example.air_workshop.ui.components.toFixed
 import kotlin.time.Clock
 import kotlin.time.Instant
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.number
 import kotlinx.datetime.toLocalDateTime
 import kotlinx.datetime.toInstant
 
@@ -22,7 +23,7 @@ class ExpenseEntryStore(
 
     override fun initialState(): ExpenseEntryState {
         val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
-        val dateStr = "${now.year}-${now.monthNumber.toString().padStart(2, '0')}-${now.day.toString().padStart(2, '0')}"
+        val dateStr = "${now.year}-${now.month.number.toString().padStart(2, '0')}-${now.day.toString().padStart(2, '0')}"
         return ExpenseEntryState(
             selectedDate = dateStr
         )
@@ -135,11 +136,11 @@ class ExpenseEntryStore(
                 val timestamp = parseDate(state.selectedDate) ?: Clock.System.now()
                 
                 if (state.isEditMode && state.editingExpense != null) {
-                    val updated = state.editingExpense!!.copy(
+                    val updated = state.editingExpense.copy(
                         amount = amount,
                         currencyCode = state.selectedCurrency.code,
                         timestamp = timestamp,
-                        tagId = state.selectedTagId!!,
+                        tagId = state.selectedTagId,
                         note = state.note,
                         isRecurring = state.isRecurring
                     )
@@ -150,7 +151,7 @@ class ExpenseEntryStore(
                         amount = amount,
                         currencyCode = state.selectedCurrency.code,
                         timestamp = timestamp,
-                        tagId = state.selectedTagId!!,
+                        tagId = state.selectedTagId,
                         note = state.note,
                         isRecurring = state.isRecurring
                     )
@@ -174,7 +175,7 @@ class ExpenseEntryStore(
 
         coroutineScope.launch {
             try {
-                expenseRepository.deleteExpense(state.editingExpense!!)
+                expenseRepository.deleteExpense(state.editingExpense)
                 sendEffect(ExpenseEntryEffect.ShowSuccessToast("Expense deleted"))
                 sendEffect(ExpenseEntryEffect.DismissScreen)
             } catch (e: Exception) {

@@ -2,7 +2,7 @@ package org.example.air_workshop.usecases
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 import org.example.air_workshop.model.Expense
 import org.example.air_workshop.repository.ExpenseRepository
 
