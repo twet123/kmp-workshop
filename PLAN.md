@@ -65,27 +65,27 @@
 ---
 
 ## Phase 3: Design System & Shared UI Components
-- [ ] Set up Material 3 theme, dark/light color schemes, and shared typography.
-- [ ] Build `MonthSelectorBar`:
+- [x] Set up Material 3 theme, dark/light color schemes, and shared typography.
+- [x] Build `MonthSelectorBar`:
   - Month and year title display (e.g., "November 2026")
   - Previous (`<`) and Next (`>`) navigation buttons
   - Quick-jump to current month action
-- [ ] Build `GoalProgressBar`:
+- [x] Build `GoalProgressBar`:
   - Visual linear indicator showing total spent vs. monthly goal
   - Color state changes (green for safe, amber for near-limit, red for exceeded)
   - Numeric display of spent amount, target goal, and percentage
-- [ ] Build `TagExpenseChart`:
+- [x] Build `TagExpenseChart`:
   - Pie/donut chart or horizontal segmented bar chart using Vico / multiplatform charts
   - Color-coded segments matching tag `colorHex`
   - Legend showing tag name, amount, and percentage
-- [ ] Build `ExpenseItemRow`:
+- [x] Build `ExpenseItemRow`:
   - Visual layout: tag color indicator/chip, note/description, timestamp, and formatted currency amount
   - Swipe-to-delete action
   - Swipe-to-edit action (or click to open editor)
-- [ ] Build `TagChip` and `TagPicker`:
+- [x] Build `TagChip` and `TagPicker`:
   - Horizontal scrollable row or flow row of selectable tags
   - Selected vs. unselected states
-- [ ] Build `ColorPickerRow`:
+- [x] Build `ColorPickerRow`:
   - Preset palette of distinct hex colors for tag creation/editing
 
 ---

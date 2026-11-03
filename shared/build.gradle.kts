@@ -48,6 +48,7 @@ kotlin {
             implementation(libs.compose.runtime)
             implementation(libs.compose.foundation)
             implementation(libs.compose.material3)
+            implementation(libs.compose.material.icons)
             implementation(libs.compose.ui)
             implementation(libs.compose.components.resources)
             implementation(libs.compose.uiToolingPreview)
@@ -66,10 +67,6 @@ kotlin {
 
             // kotlinx-datetime
             implementation(libs.kotlinx.datetime)
-
-            // Vico charting
-            implementation(libs.vico.compose)
-            implementation(libs.vico.compose.m3)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
