@@ -4,10 +4,11 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import kotlin.time.Instant
 import org.example.air_workshop.database.entities.ExpenseEntity
+import org.example.air_workshop.test.RoomTest
 import org.example.air_workshop.test.createInMemoryDatabase
 import kotlin.test.*
 
-class ExpenseDaoTest {
+class ExpenseDaoTest : RoomTest() {
 
     private val database = createInMemoryDatabase()
     private val dao = database.expenseDao()

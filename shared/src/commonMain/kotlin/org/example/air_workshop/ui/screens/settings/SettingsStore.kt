@@ -257,7 +257,7 @@ class SettingsStore(
         coroutineScope.launch {
             try {
                 val csv = exportCsv.execute(year, month)
-                sendEffect(SettingsEffect.LaunchShareSheet(csv))
+                sendEffect(SettingsEffect.LaunchShareSheet("expenses-$year-$month.csv", csv))
                 setState { copy(isLoading = false) }
             } catch (e: Exception) {
                 sendEffect(SettingsEffect.ShowNotification("Failed to export CSV"))

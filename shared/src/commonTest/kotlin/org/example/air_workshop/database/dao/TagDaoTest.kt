@@ -3,10 +3,11 @@ package org.example.air_workshop.database.dao
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.example.air_workshop.database.entities.TagEntity
+import org.example.air_workshop.test.RoomTest
 import org.example.air_workshop.test.createInMemoryDatabase
 import kotlin.test.*
 
-class TagDaoTest {
+class TagDaoTest : RoomTest() {
 
     private val database = createInMemoryDatabase()
     private val dao = database.tagDao()

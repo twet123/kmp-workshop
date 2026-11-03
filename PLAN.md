@@ -119,15 +119,15 @@
 ---
 
 ## Phase 5: Navigation & Platform-Specific Integrations
-- [ ] Set up main navigation structure:
-  - Bottom navigation bar (Mobile) / Side navigation rail (Desktop) for Dashboard, History, and Settings
-  - Modal navigation / push transitions for Expense Entry and Tag Editor
-- [ ] Implement `expect`/`actual` CSV file exporter:
-  - `androidMain`: writes temporary CSV file and opens `ACTION_SEND` Intent share sheet
-  - `iosMain`: writes temporary file and launches `UIActivityViewController`
-  - `desktopMain`: opens native AWT / Swing file save dialog (`JFileChooser`) to save `.csv` to local disk
-- [ ] Desktop UX Polish:
-  - Configure default window size, minimum bounds (e.g., 900x700), and window title in `desktopMain/kotlin/main.kt`
-  - Add keyboard shortcuts (e.g., `Ctrl/Cmd + N` to create expense, `Ctrl/Cmd + F` to search)
+- [x] Set up main navigation structure:
+  - [x] Bottom navigation bar (Mobile) / Side navigation rail (Desktop) for Dashboard, History, and Settings
+  - [x] Modal navigation / push transitions for Expense Entry and Tag Editor
+- [x] Implement `expect`/`actual` CSV file exporter:
+  - [x] `androidMain`: writes temporary CSV file and opens `ACTION_SEND` Intent share sheet
+  - [x] `iosMain`: writes temporary file and launches `UIActivityViewController`
+  - [x] `desktopMain`: opens native AWT / Swing file save dialog (`JFileChooser`) to save `.csv` to local disk
+- [x] Desktop UX Polish:
+  - [x] Configure default window size, minimum bounds (e.g., 900x700), and window title in `desktopMain/kotlin/main.kt`
+  - [x] Add keyboard shortcuts (e.g., `Ctrl/Cmd + N` to create expense, `Ctrl/Cmd + F` to search)
 
 ---

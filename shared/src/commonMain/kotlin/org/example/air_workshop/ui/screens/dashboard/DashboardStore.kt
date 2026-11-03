@@ -1,6 +1,9 @@
 package org.example.air_workshop.ui.screens.dashboard
 
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import org.example.air_workshop.mvi.MviStore
 import org.example.air_workshop.repository.ExpenseRepository
@@ -23,8 +26,11 @@ class DashboardStore(
     private val evaluateRecurring: EvaluateRecurringExpensesUseCase,
     private val tagRepository: TagRepository,
     private val expenseRepository: ExpenseRepository,
-    private val settingsRepository: SettingsRepository
+    private val settingsRepository: SettingsRepository,
+    private val goalRepository: GoalRepository
 ) : MviStore<DashboardState, DashboardIntent, DashboardEffect>() {
+
+    private var dashboardJob: Job? = null
 
     override fun initialState(): DashboardState {
         val (year, month) = currentMonth()
@@ -115,31 +121,36 @@ class DashboardStore(
     }
 
     private fun loadDashboardData(year: Int, month: Int) {
-        coroutineScope.launch {
+        // Only the selected month is observed; switching months cancels the previous observer
+        dashboardJob?.cancel()
+        dashboardJob = coroutineScope.launch {
             val yearStr = year.toString()
             val monthStr = month.toString().padStart(2, '0')
             try {
                 // Evaluate recurring expenses first
                 evaluateRecurring.execute(yearStr, monthStr)
 
-                // Load goal progress
-                val goalProgress = calculateGoalProgress.execute(yearStr, monthStr)
-
-                // Load tag breakdown
-                val breakdown = getTagBreakdown.execute(yearStr, monthStr)
-
-                // Load expenses
-                val expenses = getMonthlyExpenses.execute(yearStr, monthStr)
-
-                setState {
-                    copy(
-                        goalProgress = goalProgress,
-                        tagBreakdown = breakdown,
-                        expenses = expenses,
-                        isLoading = false,
-                        error = null
-                    )
-                }
+                // Recompute whenever expenses, tags or the goal change (e.g. after adding an expense)
+                combine(
+                    getMonthlyExpenses.observe(yearStr, monthStr),
+                    tagRepository.observeAllTags(),
+                    goalRepository.observeGoalByMonth("$yearStr-$monthStr")
+                ) { expenses, _, _ -> expenses }
+                    .collectLatest { expenses ->
+                        val goalProgress = calculateGoalProgress.execute(yearStr, monthStr)
+                        val breakdown = getTagBreakdown.execute(yearStr, monthStr)
+                        setState {
+                            copy(
+                                goalProgress = goalProgress,
+                                tagBreakdown = breakdown,
+                                expenses = expenses,
+                                isLoading = false,
+                                error = null
+                            )
+                        }
+                    }
+            } catch (e: CancellationException) {
+                throw e
             } catch (e: Exception) {
                 setState {
                     copy(
@@ -155,9 +166,8 @@ class DashboardStore(
         coroutineScope.launch {
             try {
                 expenseRepository.deleteExpense(expense)
+                // The observed month flow refreshes the dashboard
                 sendEffect(DashboardEffect.ShowSnackbar("Expense deleted"))
-                // Refresh data
-                loadDashboardData(stateFlow.value.year, stateFlow.value.month)
             } catch (e: Exception) {
                 sendEffect(DashboardEffect.ShowSnackbar("Failed to delete expense"))
             }

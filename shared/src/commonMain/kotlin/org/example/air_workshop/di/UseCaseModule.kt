@@ -8,6 +8,6 @@ val useCaseModule = module {
     factory { GetTagBreakdownUseCase(get(), get()) }
     factory { CalculateGoalProgressUseCase(get(), get()) }
     factory { SearchAndFilterExpensesUseCase(get()) }
-    factory { ExportMonthCsvUseCase(get()) }
+    factory { ExportMonthCsvUseCase(get(), get()) }
     factory { EvaluateRecurringExpensesUseCase(get()) }
 }

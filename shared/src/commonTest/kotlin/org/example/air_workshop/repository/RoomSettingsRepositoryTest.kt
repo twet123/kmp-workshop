@@ -3,10 +3,11 @@ package org.example.air_workshop.repository
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.example.air_workshop.model.Currency
+import org.example.air_workshop.test.RoomTest
 import org.example.air_workshop.test.createInMemoryDatabase
 import kotlin.test.*
 
-class RoomSettingsRepositoryTest {
+class RoomSettingsRepositoryTest : RoomTest() {
 
     private val database = createInMemoryDatabase()
     private val repository = RoomSettingsRepository(database.settingsDao())

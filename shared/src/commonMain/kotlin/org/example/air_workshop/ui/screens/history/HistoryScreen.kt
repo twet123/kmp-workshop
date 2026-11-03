@@ -200,7 +200,7 @@ fun HistoryScreen(
                                     }
                                 }
 
-                                items(expensesForDate) { expense ->
+                                items(expensesForDate, key = { it.id }) { expense ->
                                     val tag = state.tags[expense.tagId]
                                     Spacer(modifier = Modifier.height(4.dp))
                                     ExpenseItemRow(

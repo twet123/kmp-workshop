@@ -69,12 +69,15 @@ class ExpenseEntryStore(
                 )
             }
             is ExpenseEntryIntent.Submit -> {
+                // Set loading before submitting so a validation failure can reset it
+                setState { copy(isLoading = true) }
                 submitExpense()
-                stateFlow.value.copy(isLoading = true)
+                null
             }
             is ExpenseEntryIntent.Delete -> {
+                setState { copy(isLoading = true) }
                 deleteExpense()
-                stateFlow.value.copy(isLoading = true)
+                null
             }
             is ExpenseEntryIntent.ClearValidationError -> {
                 stateFlow.value.copy(validationError = null)
@@ -179,6 +182,7 @@ class ExpenseEntryStore(
                 sendEffect(ExpenseEntryEffect.ShowSuccessToast("Expense deleted"))
                 sendEffect(ExpenseEntryEffect.DismissScreen)
             } catch (e: Exception) {
+                setState { copy(isLoading = false) }
                 sendEffect(ExpenseEntryEffect.ShowValidationToast("Failed to delete expense"))
             }
         }

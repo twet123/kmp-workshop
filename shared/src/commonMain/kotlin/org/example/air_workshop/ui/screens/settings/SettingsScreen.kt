@@ -20,7 +20,7 @@ import org.koin.compose.koinInject
 @Composable
 fun SettingsScreen(
     store: SettingsStore = koinInject(),
-    onCsvExport: (csvContent: String) -> Unit = {},
+    onCsvExport: (fileName: String, csvContent: String) -> Unit = { _, _ -> },
     modifier: Modifier = Modifier
 ) {
     val state by store.stateFlow.collectAsState()
@@ -29,7 +29,7 @@ fun SettingsScreen(
     LaunchedEffect(Unit) {
         effectCollector.collect { effect ->
             when (effect) {
-                is SettingsEffect.LaunchShareSheet -> onCsvExport(effect.csvContent)
+                is SettingsEffect.LaunchShareSheet -> onCsvExport(effect.fileName, effect.csvContent)
                 is SettingsEffect.ShowNotification -> {
                     // Notification handling by parent
                 }
@@ -47,7 +47,7 @@ fun SettingsScreen(
             when {
                 state.isLoading && state.tags.isEmpty() -> {
                     Box(
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = Modifier.fillMaxSize().padding(paddingValues),
                         contentAlignment = androidx.compose.ui.Alignment.Center
                     ) {
                         CircularProgressIndicator()
@@ -113,18 +113,36 @@ fun SettingsScreen(
                                     style = MaterialTheme.typography.titleMedium,
                                     modifier = Modifier.padding(bottom = 8.dp)
                                 )
+                                var currencyMenuExpanded by remember { mutableStateOf(false) }
                                 ExposedDropdownMenuBox(
-                                    expanded = false,
-                                    onExpandedChange = {}
+                                    expanded = currencyMenuExpanded,
+                                    onExpandedChange = { currencyMenuExpanded = it }
                                 ) {
                                     OutlinedTextField(
                                         value = state.baseCurrency.displayName,
                                         onValueChange = {},
                                         readOnly = true,
+                                        trailingIcon = {
+                                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = currencyMenuExpanded)
+                                        },
                                         modifier = Modifier
                                             .fillMaxWidth()
                                             .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)
                                     )
+                                    ExposedDropdownMenu(
+                                        expanded = currencyMenuExpanded,
+                                        onDismissRequest = { currencyMenuExpanded = false }
+                                    ) {
+                                        Currency.entries.forEach { currency ->
+                                            DropdownMenuItem(
+                                                text = { Text("${currency.displayName} (${currency.symbol})") },
+                                                onClick = {
+                                                    store.onIntent(SettingsIntent.SelectBaseCurrency(currency))
+                                                    currencyMenuExpanded = false
+                                                }
+                                            )
+                                        }
+                                    }
                                 }
                             }
                         }

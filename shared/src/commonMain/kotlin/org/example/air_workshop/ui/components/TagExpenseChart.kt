@@ -3,8 +3,6 @@ package org.example.air_workshop.ui.components
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -96,9 +94,9 @@ fun TagExpenseChart(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Legend
-            LazyColumn {
-                items(breakdown) { item ->
+            // Legend: a plain Column, since this chart is hosted inside the dashboard's LazyColumn
+            Column {
+                breakdown.forEach { item ->
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()

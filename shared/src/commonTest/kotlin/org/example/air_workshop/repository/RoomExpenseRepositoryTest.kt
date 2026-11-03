@@ -4,10 +4,11 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import kotlin.time.Instant
 import org.example.air_workshop.model.Expense
+import org.example.air_workshop.test.RoomTest
 import org.example.air_workshop.test.createInMemoryDatabase
 import kotlin.test.*
 
-class RoomExpenseRepositoryTest {
+class RoomExpenseRepositoryTest : RoomTest() {
 
     private val database = createInMemoryDatabase()
     private val repository = RoomExpenseRepository(database.expenseDao())

@@ -3,8 +3,6 @@ package org.example.air_workshop.ui.screens.dashboard
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -37,16 +35,6 @@ fun DashboardScreen(
 
     AppTheme {
         Scaffold(
-            floatingActionButton = {
-                FloatingActionButton(
-                    onClick = { store.onIntent(DashboardIntent.Refresh) }
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = "Add expense"
-                    )
-                }
-            },
             modifier = modifier.fillMaxSize()
         ) { paddingValues ->
             Column(
@@ -132,7 +120,7 @@ fun DashboardScreen(
                             }
 
                             // Expense list
-                            items(state.expenses) { expense ->
+                            items(state.expenses, key = { it.id }) { expense ->
                                 val tag = state.tags[expense.tagId]
                                 Spacer(modifier = Modifier.height(4.dp))
                                 ExpenseItemRow(

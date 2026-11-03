@@ -7,16 +7,16 @@ import org.example.air_workshop.ui.screens.settings.SettingsStore
 import org.koin.dsl.module
 
 val storeModule = module {
-    factory { DashboardStore(
-        get(), get(), get(), get(), get(), get(), get()
+    single { DashboardStore(
+        get(), get(), get(), get(), get(), get(), get(), get()
     ) }
     factory { ExpenseEntryStore(
         get(), get(), get()
     ) }
-    factory { HistoryStore(
+    single { HistoryStore(
         get(), get(), get(), get()
     ) }
-    factory { SettingsStore(
+    single { SettingsStore(
         get(), get(), get(), get()
     ) }
 }

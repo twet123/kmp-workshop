@@ -10,9 +10,12 @@ fun setAndroidContext(context: Context) {
     applicationContext = context.applicationContext
 }
 
+/** Application context set by [setAndroidContext]; shared with other androidMain platform code. */
+internal fun requireAndroidContext(): Context = applicationContext
+    ?: throw IllegalStateException("Android context not initialized. Call setAndroidContext() first.")
+
 actual fun getDatabaseBuilder(): RoomDatabase.Builder<AppDatabase> {
-    val context = applicationContext
-        ?: throw IllegalStateException("Android context not initialized. Call setAndroidContext() first.")
+    val context = requireAndroidContext()
     val dbFile = context.getDatabasePath("expenses.db")
     return Room.databaseBuilder<AppDatabase>(
         context = context,

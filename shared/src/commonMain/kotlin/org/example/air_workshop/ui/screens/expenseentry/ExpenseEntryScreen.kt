@@ -5,6 +5,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -79,21 +81,26 @@ fun ExpenseEntryScreen(
                 )
             },
             floatingActionButton = {
-                if (state.isFormValid && !state.isLoading) {
-                    FloatingActionButton(
-                        onClick = { store.onIntent(ExpenseEntryIntent.Submit) }
-                    ) {
+                // Always visible; Submit reports validation errors for an incomplete form
+                ExtendedFloatingActionButton(
+                    onClick = {
+                        if (!state.isLoading) store.onIntent(ExpenseEntryIntent.Submit)
+                    },
+                    icon = {
                         if (state.isLoading) {
                             CircularProgressIndicator(
                                 modifier = Modifier.size(24.dp),
-                                color = MaterialTheme.colorScheme.onPrimary,
                                 strokeWidth = 2.dp
                             )
                         } else {
-                            Text("Save")
+                            Icon(
+                                imageVector = if (state.isEditMode) Icons.Default.Check else Icons.Default.Add,
+                                contentDescription = null
+                            )
                         }
-                    }
-                }
+                    },
+                    text = { Text(if (state.isEditMode) "Save" else "Add") }
+                )
             },
             modifier = modifier.fillMaxSize()
         ) { paddingValues ->
@@ -123,9 +130,10 @@ fun ExpenseEntryScreen(
                 )
 
                 // Currency selector
+                var currencyMenuExpanded by remember { mutableStateOf(false) }
                 ExposedDropdownMenuBox(
-                    expanded = false,
-                    onExpandedChange = {}
+                    expanded = currencyMenuExpanded,
+                    onExpandedChange = { currencyMenuExpanded = it }
                 ) {
                     OutlinedTextField(
                         value = state.selectedCurrency.displayName,
@@ -133,12 +141,26 @@ fun ExpenseEntryScreen(
                         readOnly = true,
                         label = { Text("Currency") },
                         trailingIcon = {
-                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = false)
+                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = currencyMenuExpanded)
                         },
                         modifier = Modifier
                             .fillMaxWidth()
                             .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)
                     )
+                    ExposedDropdownMenu(
+                        expanded = currencyMenuExpanded,
+                        onDismissRequest = { currencyMenuExpanded = false }
+                    ) {
+                        Currency.entries.forEach { currency ->
+                            DropdownMenuItem(
+                                text = { Text("${currency.displayName} (${currency.symbol})") },
+                                onClick = {
+                                    store.onIntent(ExpenseEntryIntent.SelectCurrency(currency))
+                                    currencyMenuExpanded = false
+                                }
+                            )
+                        }
+                    }
                 }
 
                 // Tag picker

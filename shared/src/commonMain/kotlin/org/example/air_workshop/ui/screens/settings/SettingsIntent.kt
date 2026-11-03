@@ -21,6 +21,6 @@ sealed interface SettingsIntent {
 }
 
 sealed interface SettingsEffect {
-    data class LaunchShareSheet(val csvContent: String) : SettingsEffect
+    data class LaunchShareSheet(val fileName: String, val csvContent: String) : SettingsEffect
     data class ShowNotification(val message: String) : SettingsEffect
 }

@@ -1,7 +1,6 @@
 package org.example.air_workshop.ui.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
@@ -12,15 +11,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.layout.layout
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
 import kotlin.time.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import org.example.air_workshop.model.Expense
 import org.example.air_workshop.model.Tag
-import kotlin.math.absoluteValue
 
 @Composable
 fun ExpenseItemRow(
@@ -32,78 +29,62 @@ fun ExpenseItemRow(
     onSwipeToEdit: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var swipeOffset by remember { mutableFloatStateOf(0f) }
-    val maxSwipe = 100f
+    val scope = rememberCoroutineScope()
+    val dismissState = rememberSwipeToDismissBoxState()
 
-    Box(
-        modifier = modifier.fillMaxWidth()
-    ) {
-        // Background swipe actions
-        Box(
-            modifier = Modifier
-                .matchParentSize()
-                .background(MaterialTheme.colorScheme.surfaceContainerHighest)
-        ) {
-            // Delete action (swipe left)
-            IconButton(
-                onClick = onSwipeToDelete,
-                modifier = Modifier.align(Alignment.CenterStart).padding(start = 16.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Delete,
-                    contentDescription = "Delete",
-                    tint = MaterialTheme.colorScheme.error
-                )
+    SwipeToDismissBox(
+        state = dismissState,
+        modifier = modifier.fillMaxWidth(),
+        onDismiss = { direction ->
+            when (direction) {
+                SwipeToDismissBoxValue.StartToEnd -> onSwipeToEdit()
+                SwipeToDismissBoxValue.EndToStart -> onSwipeToDelete()
+                SwipeToDismissBoxValue.Settled -> Unit
             }
-
-            // Edit action (swipe right)
-            IconButton(
-                onClick = onSwipeToEdit,
-                modifier = Modifier.align(Alignment.CenterEnd).padding(end = 16.dp)
+            // Snap back; a deleted row leaves the list, an edited row stays in place
+            scope.launch { dismissState.reset() }
+        },
+        backgroundContent = {
+            val direction = dismissState.dismissDirection
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        color = when (direction) {
+                            SwipeToDismissBoxValue.StartToEnd -> MaterialTheme.colorScheme.primaryContainer
+                            SwipeToDismissBoxValue.EndToStart -> MaterialTheme.colorScheme.errorContainer
+                            SwipeToDismissBoxValue.Settled -> Color.Transparent
+                        },
+                        shape = CardDefaults.shape
+                    )
+                    .padding(horizontal = 24.dp),
+                contentAlignment = if (direction == SwipeToDismissBoxValue.EndToStart) {
+                    Alignment.CenterEnd
+                } else {
+                    Alignment.CenterStart
+                }
             ) {
-                Icon(
-                    imageVector = Icons.Default.Edit,
-                    contentDescription = "Edit",
-                    tint = MaterialTheme.colorScheme.primary
-                )
+                when (direction) {
+                    // Swipe right reveals edit on the left edge
+                    SwipeToDismissBoxValue.StartToEnd -> Icon(
+                        imageVector = Icons.Default.Edit,
+                        contentDescription = "Edit",
+                        tint = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
+                    // Swipe left reveals delete on the right edge
+                    SwipeToDismissBoxValue.EndToStart -> Icon(
+                        imageVector = Icons.Default.Delete,
+                        contentDescription = "Delete",
+                        tint = MaterialTheme.colorScheme.onErrorContainer
+                    )
+                    SwipeToDismissBoxValue.Settled -> Unit
+                }
             }
         }
-
+    ) {
         // Main content card
         Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .layout { measurable, constraints ->
-                    val placeable = measurable.measure(constraints)
-                    layout(placeable.width, placeable.height) {
-                        placeable.place(swipeOffset.toInt(), 0)
-                    }
-                }
-                .pointerInput(Unit) {
-                    detectHorizontalDragGestures(
-                        onDragEnd = {
-                            if (swipeOffset.absoluteValue > maxSwipe / 2) {
-                                if (swipeOffset > 0) {
-                                    swipeOffset = maxSwipe
-                                } else {
-                                    swipeOffset = -maxSwipe
-                                }
-                            } else {
-                                swipeOffset = 0f
-                            }
-                        },
-                        onHorizontalDrag = { _, dragAmount ->
-                            swipeOffset = swipeOffset.coerceIn(-maxSwipe, maxSwipe) + dragAmount
-                            if (swipeOffset == -maxSwipe) {
-                                onSwipeToDelete()
-                                swipeOffset = 0f
-                            } else if (swipeOffset == maxSwipe) {
-                                onSwipeToEdit()
-                                swipeOffset = 0f
-                            }
-                        }
-                    )
-                },
+            modifier = Modifier.fillMaxWidth(),
             onClick = onClick,
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.surface
