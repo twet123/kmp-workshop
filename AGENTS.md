@@ -11,15 +11,19 @@
 - **Platform Scope:** Shared single-codebase UI targeting Android, iOS, and Desktop (JVM) using Compose Multiplatform.
 
 ## Core Principles
-1. **Target Common First:** All domain models, ViewModels, business logic, and UI components MUST reside in `commonMain` unless platform-specific APIs are strictly required.
+1. **Target Common First:** All domain models, MVI Stores, business logic, and UI components MUST reside in `commonMain` unless platform-specific APIs are strictly required.
 2. **No Platform Leaks:** Never import `android.*`, `java.*`, or platform-specific libraries into `commonMain`. Use `expect`/`actual` declarations only when strictly necessary.
 3. **Never Edit Gradle Unprompted:** Do not modify `build.gradle.kts` or `libs.versions.toml` unless the current task explicitly requires adding a dependency.
 4. **Compile-Check Every Step:** After generating code, verify compilation using the Gradle CLI (`./gradlew assembleDebug` or target-specific check).
 
 ## Tech Stack & Conventions
+- **Architecture:** MVI (Model-View-Intent) using MVI Stores.
+  - **View:** Declarative Compose functions that collect `StateFlow<State>` and emit `Intent`s.
+  - **Intent:** Sealed interfaces representing discrete user/lifecycle actions (never expose loose public mutation methods).
+  - **Store:** Explicit state container (`DashboardStore`, `SettingsStore`) containing a single immutable `State` data class and a reducer/intent handler.
+  - **Side Effects:** Single-shot events (e.g., navigation, file saving) dispatched via a shared Kotlin `Channel` / `Flow<Effect>`.
 - **Language:** Kotlin 2.x
 - **UI:** Compose Multiplatform (Material 3)
-- **Architecture:** MVVM with MVI-style UI state: `StateFlow<UiState>` + single entry `onEvent(UiEvent)`.
 - **Database:** Room KMP / SQLite
 - **Dependency Injection:** Koin
 - **Date/Time:** `kotlinx-datetime` (always use `Instant` or `LocalDate`, never `java.time.*` or `Date`). But, prefer using kotlin.time if the same API is available in it, because kotlinx.datetime was mostly deprecated in favor of kotlin.time

@@ -4,7 +4,7 @@
 - [x] Configure `gradle/libs.versions.toml` with versions and dependencies, please use only the latest stable version for these dependencies and avoid using 'RC', 'Alpha', 'Beta' and similar:
   - Compose Multiplatform (Material 3)
   - Room KMP (with SQLite driver and KSP compiler)
-  - Koin (`koin-core`, `koin-compose`, `koin-compose-viewmodel`)
+  - Koin (`koin-core`, `koin-compose`)
   - `kotlinx-datetime` and `kotlinx-coroutines-core`
   - Navigation library (Voyager or Navigation Compose Multiplatform)
   - Charting library (Vico Compose Multiplatform or Compose-Charts)
@@ -43,18 +43,24 @@
 
 ---
 
-## Phase 2: Domain Business Logic & Use Cases
+## Phase 2: Domain Business Logic & MVI Foundation
 - [x] Implement `GetMonthlyExpensesUseCase`: fetches all expenses for a specified `year-month` grouped chronologically.
 - [x] Implement `GetTagBreakdownUseCase`: aggregates monthly spending grouped by tag (sum per tag, percentage of total).
-- [x] Implement `CalculateGoalProgressUseCase`: calculates total spent vs. `MonthlyGoal`, remaining balance, and warning threshold states (e.g., normal, warning at 80%, exceeded at 100%).
+- [x] Implement `CalculateGoalProgressUseCase`: calculates total spent vs. `MonthlyGoal`, remaining balance, and warning threshold states.
 - [x] Implement `SearchAndFilterExpensesUseCase`: filters expenses by search text (in notes), tag IDs, and date intervals.
 - [x] Implement `ExportMonthCsvUseCase`: formats all transactions of a given month into standard RFC 4180 CSV string format.
-- [x] Implement recurring expense evaluation logic: checks and auto-generates recurring transactions for the current active month.
+- [x] Implement recurring expense evaluation logic: auto-generates recurring transactions for the current active month.
+- [x] Build base MVI abstractions in `commonMain`:
+  - [x] `MviStore<State, Intent, Effect>` base class or interface using `StateFlow<State>` and `Channel`/`Flow<Effect>`
+  - [x] Sealed `Intent` interface pattern for discrete user/lifecycle actions
+  - [x] Immutable `State` data class pattern per screen
+  - [x] Single-shot `Effect` pattern for navigation, snackbars, and other side effects
+  - [x] Base `CoroutineScope` lifecycle handler for KMP desktop, mobile, and iOS runtimes
 - [x] Set up Koin dependency injection modules:
-  - `databaseModule` (Room instance, DAOs)
-  - `repositoryModule` (Repositories)
-  - `useCaseModule` (Business use cases)
-  - `viewModelModule` (Screen ViewModels)
+  - [x] `databaseModule` (Room instance, DAOs)
+  - [x] `repositoryModule` (Repositories)
+  - [x] `useCaseModule` (Business use cases)
+  - [x] `storeModule` (MVI Stores / State Containers per screen)
 
 ---
 
@@ -84,36 +90,31 @@
 
 ---
 
-## Phase 4: Screen Implementation & ViewModels
-- [ ] **Dashboard Screen (`DashboardScreen` & `DashboardViewModel`):**
-  - Integrate `MonthSelectorBar` at the top
-  - Display `GoalProgressBar` card
-  - Display `TagExpenseChart` spending breakdown
-  - Display "Recent Activity" list (latest 5–10 transactions) with a "View All" button
-  - Floating Action Button (FAB) linking to `ExpenseEntryScreen`
-  - Empty state when no expenses exist for the selected month
-- [ ] **Expense Entry / Editor Screen (`ExpenseEntryScreen` & `ExpenseEntryViewModel`):**
-  - Numeric input field for transaction amount with decimal validation
-  - Currency picker dropdown (defaults to user's base currency setting)
-  - Tag selector using `TagPicker`
-  - Date picker dialog/field to backdate or forward-date the entry
-  - Notes / description single-line text input
-  - Recurring expense toggle switch ("Repeat monthly")
-  - Save button, Cancel button, and Delete button (visible only in edit mode)
-  - Form validation (non-zero amount, required tag selection)
-- [ ] **Transaction History Screen (`HistoryScreen` & `HistoryViewModel`):**
-  - Top search bar for filtering transactions by note/keyword
-  - Horizontal filter chips for tag selection and date sub-ranges
-  - Sticky header list grouping expenses chronologically by day
-  - Embed `ExpenseItemRow` with swipe actions (swipe left to delete, swipe right to edit)
-  - Empty search/filter result state
-- [ ] **Settings & Configuration Screen (`SettingsScreen` & `SettingsViewModel`):**
-  - **Goal Configuration:** Input field to set or update the monthly spending goal for the active month
-  - **Default Currency:** Dropdown selector to choose global default currency (EUR, USD, RSD, etc.)
-  - **Tag Management Sub-view:**
-    - List of existing tags with edit and delete controls
-    - "Add Tag" modal/form with name input and `ColorPickerRow`
-  - **Data Export:** "Export Month as CSV" button triggering file export
+## Phase 4: Screen Implementation & VMI Stores
+- [ ] **Dashboard Screen:**
+  - Define `DashboardState` (month, goal metrics, tag breakdown, recent list, loading/error states)
+  - Define `DashboardIntent` (SelectMonth, DeleteExpense, Refresh)
+  - Define `DashboardEffect` (one-off navigation events, snackbars)
+  - Implement `DashboardStore` to process intents, call use cases, and reduce state
+  - Implement `DashboardScreen` Compose view consuming `DashboardState` and routing intents to `DashboardStore.onIntent`
+- [ ] **Expense Entry / Editor Screen:**
+  - Define `ExpenseEntryState` (form fields, validation errors, available tags, selected currency, isEditMode)
+  - Define `ExpenseEntryIntent` (UpdateAmount, SelectTag, SelectCurrency, SelectDate, ToggleRecurring, Submit, Delete)
+  - Define `ExpenseEntryEffect` (DismissScreen, ShowValidationToast)
+  - Implement `ExpenseEntryStore`
+  - Implement `ExpenseEntryScreen` Compose view
+- [ ] **Transaction History Screen:**
+  - Define `HistoryState` (grouped expenses, active query, selected filter tags, active date range)
+  - Define `HistoryIntent` (SearchQueryChanged, TagFilterToggled, DateRangeSelected, DeleteExpense)
+  - Define `HistoryEffect` (NavigateToEditor)
+  - Implement `HistoryStore`
+  - Implement `HistoryScreen` with sticky daily headers and swipe actions
+- [ ] **Settings & Configuration Screen:**
+  - Define `SettingsState` (current monthly goal, base currency, tag list, new tag input modal state)
+  - Define `SettingsIntent` (UpdateMonthlyGoal, SelectBaseCurrency, CreateTag, EditTag, DeleteTag, TriggerCsvExport)
+  - Define `SettingsEffect` (LaunchShareSheet, ShowNotification)
+  - Implement `SettingsStore`
+  - Implement `SettingsScreen` with Tag CRUD forms and export triggers
 
 ---
 

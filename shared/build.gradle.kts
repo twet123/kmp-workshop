@@ -51,7 +51,6 @@ kotlin {
             implementation(libs.compose.ui)
             implementation(libs.compose.components.resources)
             implementation(libs.compose.uiToolingPreview)
-            implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
 
             // Room KMP
@@ -61,7 +60,6 @@ kotlin {
             // Koin
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
-            implementation(libs.koin.compose.viewmodel)
 
             // Navigation Compose
             implementation(libs.androidx.navigation.compose)
