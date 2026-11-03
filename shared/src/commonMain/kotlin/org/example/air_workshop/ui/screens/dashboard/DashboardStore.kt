@@ -117,7 +117,7 @@ class DashboardStore(
     private fun loadDashboardData(year: Int, month: Int) {
         coroutineScope.launch {
             val yearStr = year.toString()
-            val monthStr = "%02d".format(month)
+            val monthStr = month.toString().padStart(2, '0')
             try {
                 // Evaluate recurring expenses first
                 evaluateRecurring.execute(yearStr, monthStr)

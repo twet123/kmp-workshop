@@ -18,7 +18,6 @@ import androidx.compose.ui.unit.dp
 import kotlin.time.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
-import org.example.air_workshop.model.Currency
 import org.example.air_workshop.model.Expense
 import org.example.air_workshop.model.Tag
 import kotlin.math.absoluteValue
@@ -195,11 +194,6 @@ private fun formatDate(timestamp: Instant): String {
     val hour = localDateTime.hour.toString().padStart(2, '0')
     val minute = localDateTime.minute.toString().padStart(2, '0')
     return "$day $month $year • $hour:$minute"
-}
-
-private fun formatCurrency(amount: Double, currencyCode: String): String {
-    val currency = Currency.fromCode(currencyCode)
-    return "${currency.symbol}${"%.2f".format(amount)}"
 }
 
 private fun hexToColor(hex: String): Color {

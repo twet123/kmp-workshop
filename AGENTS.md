@@ -12,7 +12,7 @@
 
 ## Core Principles
 1. **Target Common First:** All domain models, MVI Stores, business logic, and UI components MUST reside in `commonMain` unless platform-specific APIs are strictly required.
-2. **No Platform Leaks:** Never import `android.*`, `java.*`, or platform-specific libraries into `commonMain`. Use `expect`/`actual` declarations only when strictly necessary.
+2. **No Platform Leaks:** Never import `android.*`, `java.*`, or platform-specific libraries into `commonMain`. Use `expect`/`actual` declarations only when strictly necessary. Do not use any platform specific calls in common* sources, like "%.2f".format(), it's a Java specific call.
 3. **Never Edit Gradle Unprompted:** Do not modify `build.gradle.kts` or `libs.versions.toml` unless the current task explicitly requires adding a dependency.
 4. **Compile-Check Every Step:** After generating code, verify compilation using the Gradle CLI (`./gradlew assembleDebug` or target-specific check).
 

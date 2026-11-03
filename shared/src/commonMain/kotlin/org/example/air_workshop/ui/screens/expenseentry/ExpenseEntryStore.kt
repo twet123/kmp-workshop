@@ -7,6 +7,7 @@ import org.example.air_workshop.repository.ExpenseRepository
 import org.example.air_workshop.repository.TagRepository
 import org.example.air_workshop.repository.SettingsRepository
 import org.example.air_workshop.model.Currency
+import org.example.air_workshop.ui.components.toFixed
 import kotlin.time.Clock
 import kotlin.time.Instant
 import kotlinx.datetime.TimeZone
@@ -98,7 +99,7 @@ class ExpenseEntryStore(
     private fun populateForm(expense: Expense) {
         setState {
             copy(
-                amount = "%.2f".format(expense.amount),
+                amount = expense.amount.toFixed(2),
                 selectedTagId = expense.tagId,
                 selectedCurrency = Currency.fromCode(expense.currencyCode),
                 note = expense.note,

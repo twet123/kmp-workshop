@@ -82,7 +82,7 @@ fun SettingsScreen(
                                         )
                                         Text(
                                             text = state.currentGoal?.let {
-                                                "${Currency.fromCode(it.currencyCode).symbol}${"%.2f".format(it.targetAmount)}"
+                                                formatCurrency(it.targetAmount, it.currencyCode)
                                             } ?: "Not set",
                                             style = MaterialTheme.typography.bodyMedium,
                                             color = MaterialTheme.colorScheme.onSurfaceVariant

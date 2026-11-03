@@ -89,7 +89,7 @@ fun TagExpenseChart(
                 
                 // Center text
                 Text(
-                    text = "${currency.symbol}${"%.0f".format(total)}",
+                    text = formatCurrency(total, currency, decimals = 0),
                     style = MaterialTheme.typography.titleLarge
                 )
             }
@@ -125,7 +125,7 @@ fun TagExpenseChart(
                         }
                         Row {
                             Text(
-                                text = "${currency.symbol}${"%.2f".format(item.totalAmount)}",
+                                text = formatCurrency(item.totalAmount, currency),
                                 style = MaterialTheme.typography.bodyMedium,
                                 modifier = Modifier.padding(end = 8.dp)
                             )

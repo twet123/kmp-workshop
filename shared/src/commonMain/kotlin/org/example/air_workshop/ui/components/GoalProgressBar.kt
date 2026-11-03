@@ -7,7 +7,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import org.example.air_workshop.model.Currency
 import org.example.air_workshop.usecases.BudgetStatus
 import org.example.air_workshop.usecases.GoalProgress
 
@@ -138,9 +137,4 @@ private fun getProgressColor(status: BudgetStatus): Color {
         BudgetStatus.WARNING -> Color(0xFFFFA000) // Amber
         BudgetStatus.EXCEEDED -> MaterialTheme.colorScheme.error
     }
-}
-
-private fun formatCurrency(amount: Double, currencyCode: String): String {
-    val currency = Currency.fromCode(currencyCode)
-    return "${currency.symbol}${"%.2f".format(amount)}"
 }
