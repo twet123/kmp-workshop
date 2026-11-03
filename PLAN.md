@@ -13,33 +13,33 @@
 ---
 
 ## Phase 1: Shared Domain Models & Local Persistence
-- [ ] Define shared domain entities in `commonMain`:
+- [x] Define shared domain entities in `commonMain`:
   - `Expense` (id, amount, currencyCode, timestamp, tagId, note, isRecurring)
   - `Tag` (id, name, colorHex)
   - `MonthlyGoal` (monthYear, targetAmount, currencyCode)
   - `Currency` enum/value object (code, symbol, displayName)
-- [ ] Implement Room database schema and entities:
+- [x] Implement Room database schema and entities:
   - `ExpenseEntity`, `TagEntity`, and `MonthlyGoalEntity` with indexes and relationships
   - Room TypeConverters for `Instant` / `LocalDateTime` via `kotlinx-datetime`
-- [ ] Create Data Access Objects (DAOs):
+- [x] Create Data Access Objects (DAOs):
   - `ExpenseDao`: CRUD operations, observe by month, observe by tag, search by query, delete by ID
   - `TagDao`: CRUD operations, observe all tags
   - `GoalDao`: upsert goal by `monthYear`, observe goal for month
-- [ ] Implement platform-specific database path builders (`expect`/`actual`):
+- [x] Implement platform-specific database path builders (`expect`/`actual`):
   - `commonMain`: `expect fun getDatabaseBuilder(): RoomDatabase.Builder<AppDatabase>`
   - `androidMain`: Resolve path via `context.getDatabasePath("expenses.db")`
   - `iosMain`: Resolve path in `NSDocumentDirectory` via `NSFileManager`
   - `desktopMain`: Resolve path inside user home directory (e.g., `~/.expense_tracker/expenses.db`)
-- [ ] Configure database factory in `commonMain`:
+- [x] Configure database factory in `commonMain`:
   - Attach unified `BundledSQLiteDriver()` to `RoomDatabase.Builder`
   - Set query coroutine context (`Dispatchers.IO`)
   - Instantiate shared `AppDatabase` instance
-- [ ] Implement repository interfaces and Room implementations:
+- [x] Implement repository interfaces and Room implementations:
   - `ExpenseRepository`
   - `TagRepository`
   - `GoalRepository`
   - `SettingsRepository` (local key-value store for user default currency)
-- [ ] Write unit tests verifying Room DAOs, queries, and repository CRUD logic in `commonTest`.
+- [x] Write unit tests verifying Room DAOs, queries, and repository CRUD logic in `commonTest`.
 
 ---
 
