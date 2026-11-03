@@ -1,7 +1,7 @@
 # Multiplatform Expense Tracker Implementation Plan
 
 ## Phase 0: Scaffolding & Build Configuration
-- [ ] Configure `gradle/libs.versions.toml` with versions and dependencies:
+- [ ] Configure `gradle/libs.versions.toml` with versions and dependencies, please use only the latest stable version for these dependencies and avoid using 'RC', 'Alpha', 'Beta' and similar:
   - Compose Multiplatform (Material 3)
   - Room KMP (with SQLite driver and KSP compiler)
   - Koin (`koin-core`, `koin-compose`, `koin-compose-viewmodel`)
